@@ -24,6 +24,7 @@ function taskStore(?callable $change = null): array
         if (!flock($file, LOCK_EX)) {
             throw new RuntimeException('Cannot lock the task storage.');
         }
+        ftruncate($file, 0);
         $contents = stream_get_contents($file);
         $tasks = $contents === '' ? [] : json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
         if (!is_array($tasks)) {
